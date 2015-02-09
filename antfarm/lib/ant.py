@@ -8,9 +8,9 @@ from antfarm.lib import constants
 
 class Ant(pyglet.sprite.Sprite):
 
-    def __init__(self, batch, img, space, x=200, y=200):
-        img.width = 20
-        img.height = 20
+    def __init__(self, batch, img, space, x, y):
+        img.width = constants.ANT_LENGTH
+        img.height = constants.ANT_LENGTH
         img.anchor_x = img.width / 2
         img.anchor_y = img.height / 2
         self.dx = 20
