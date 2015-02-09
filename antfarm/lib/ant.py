@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from weakref import proxy
+
 import pyglet
 import pymunk
 
@@ -13,6 +15,7 @@ class Ant(pyglet.sprite.Sprite):
         img.height = constants.ANT_LENGTH
         img.anchor_x = img.width / 2
         img.anchor_y = img.height / 2
+        self.dig_speed = constants.ANT_DIG_SPEED
         self.dx = 20
         self.dy = 20
         self.mass = 10
@@ -20,6 +23,7 @@ class Ant(pyglet.sprite.Sprite):
         self.body = pymunk.Body(self.mass, self.inertia)
         self.shape = pymunk.Circle(self.body, img.width / 2, (0, 0))
         self.shape.collision_type = constants.ANT_COLLISION_TYPE
+        self.shape.ref = proxy(self)
         self.body.position = x, y
         space.add(self.body, self.shape)
         super(Ant, self).__init__(
