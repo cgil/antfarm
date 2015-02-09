@@ -17,10 +17,10 @@ def requirements(filename='requirements.txt'):
     return requires
 
 setuptools.setup(
-    name='ants',
-    version='0.0.1',
+    name='antfarm',
+    version='0.0.2',
     packages=setuptools.find_packages(),
     install_requires=requirements(),
-    description='Ant farm simulator.',
+    description='Ant farm simulator, because my apartment doesnt let me own one.',
 )
 

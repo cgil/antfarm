@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import pyglet
 import pymunk
 
-from ants.lib import constants
+from antfarm.lib import constants
 
 
 class Opening(pyglet.sprite.Sprite):

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import pyglet
 
-from ants.lib.game import Game
+from antfarm.lib.game import Game
 
 pyglet.resource.path = ['static']
 pyglet.resource.reindex()

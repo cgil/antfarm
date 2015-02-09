@@ -3,9 +3,9 @@ import pymunk
 from pymunk.pyglet_util import draw as pymunk_draw
 from pyglet.window import key
 
-from ants.lib import constants
-from ants.lib.ant import Ant
-from ants.lib.opening import Opening
+from antfarm.lib import constants
+from antfarm.lib.ant import Ant
+from antfarm.lib.opening import Opening
 
 
 class Game(pyglet.window.Window):
