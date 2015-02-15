@@ -16,6 +16,7 @@ class Tile(pyglet.sprite.Sprite):
         img.anchor_x = img.width / 2
         img.anchor_y = img.height / 2
         (self.grid_x, self.grid_y) = grid_pos
+        self.id = constants.TILE_ID
         self.is_alive = True
         self.shape = pymunk.Circle(body, img.width / 2, (x, y))
         self.shape.color = (255, 0, 0)

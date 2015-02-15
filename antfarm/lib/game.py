@@ -31,9 +31,10 @@ class Game(pyglet.window.Window):
         )
         pyglet.gl.glClearColor(*constants.DEF_BKGDCOLOR)
         pyglet.clock.schedule(self.update)
-        self.populate_grid()
+        self.initiate_grid()
 
-    def populate_grid(self):
+    def initiate_grid(self):
+        """Initiate the grid."""
         rows = self.height / constants.GRID_TILE_LENGTH
         cols = self.width / constants.GRID_TILE_LENGTH
         offset = constants.GRID_TILE_LENGTH / 2
@@ -42,14 +43,21 @@ class Game(pyglet.window.Window):
             for col in xrange(cols):
                 x_pos = col * constants.GRID_TILE_LENGTH + offset
                 y_pos = row * constants.GRID_TILE_LENGTH + offset
-                if row == 0 or row == rows or col == 0 or col == cols - 1:
+                if row == 0 or row == rows - 1 or col == 0 or col == cols - 1:
                     self.add_tile('encasing', (row, col),
                                   (x_pos, y_pos), constants.GRID_TILE_LENGTH)
-                elif row == 1 and col == 1:
+                elif row == rows - 5 and col == cols / 2:
                     self.add_ant((x_pos, y_pos))
                     self.grid[row][col] = None
                 else:
                     self.add_tile('dirt', (row, col), (x_pos, y_pos), constants.GRID_TILE_LENGTH)
+        ten_pct_rows = int(rows * 0.1)
+        for row in xrange(ten_pct_rows):
+            from_top_row = rows - row - 1
+            for col in xrange(cols):
+                if col == 0 or col == cols - 1:
+                    continue
+                self.remove(self.grid[from_top_row][col])
 
     def add_tile(self, tile_type, grid_pos, body_pos, tile_length):
         """Adds a tile to the grid."""
@@ -76,13 +84,13 @@ class Game(pyglet.window.Window):
                 dirt = shape.ref
             elif shape.collision_type == constants.ANT_COLLISION_TYPE:
                 ant = shape.ref
-        dirt.dig(ant.dig_speed)
-        if not dirt.is_alive:
-            self.remove(dirt)
+        ant.saw(dirt)
         return True
 
     def remove(self, obj):
         """Remove an object from the game."""
+        if not obj:
+            return
         self.space.remove(obj.shape)
         self.grid[obj.grid_x][obj.grid_y] = None
 
@@ -110,15 +118,23 @@ class Game(pyglet.window.Window):
 
     def on_key_release(self, symbol, modifiers):
         if symbol == key.UP:
-            self.keys['up'] = False
+            self.keys[constants.UP] = False
         elif symbol == key.LEFT:
-            self.keys['left'] = False
+            self.keys[constants.LEFT] = False
         elif symbol == key.RIGHT:
-            self.keys['right'] = False
+            self.keys[constants.RIGHT] = False
         elif symbol == key.DOWN:
-            self.keys['down'] = False
+            self.keys[constants.DOWN] = False
 
     def update(self, dt):
         for ant in self.ants:
             ant.update(dt, self.keys)
+
+        for row in self.grid:
+            for obj in row:
+                try:
+                    if not obj.is_alive:
+                        self.remove(obj)
+                except Exception:
+                    pass
         self.space.step(dt)
